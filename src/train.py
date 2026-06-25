@@ -27,6 +27,7 @@ def plot_roc_curves(results, save_path="model_benchmark_roc_curves.png"):
     plt.grid(True)
     
     plt.savefig(save_path)
+    plt.close()
     print(f"\n✓ ROC curve comparison chart saved to '{save_path}'")
 
 def run_training():
