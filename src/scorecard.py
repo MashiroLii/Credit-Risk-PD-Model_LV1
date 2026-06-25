@@ -10,29 +10,27 @@ from src import processing
 def plot_grade_analysis(grade_stats, save_path="scorecard_grade_analysis.png"):
     """
     Plots a bar chart showing the default rate for each credit grade.
+    NOW EXPECTS 'Default_Rate' to be a float.
     """
     plt.style.use('seaborn-v0_8-whitegrid')
     fig, ax = plt.subplots(figsize=(10, 7))
 
-    # Convert percentage string back to float for plotting
-    default_rates = grade_stats['Default_Rate'].str.rstrip('%').astype('float') / 100.0
+    # --- THIS IS THE FIX ---
+    # The 'Default_Rate' column is now a direct float, no string conversion needed.
+    default_rates = grade_stats['Default_Rate']
 
     bars = ax.bar(grade_stats.index, default_rates, color='skyblue')
     
-    # Format the y-axis to show percentages
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
-
     ax.set_title('Default Rate by Credit Grade', fontsize=16)
     ax.set_ylabel('Default Rate')
     ax.set_xlabel('Credit Grade')
-    ax.set_ylim(0, 1) # y-axis from 0% to 100%
+    ax.set_ylim(0, max(default_rates) * 1.2) # Set y-limit slightly above the max rate
 
-    # Add data labels on top of each bar
     for bar in bars:
         yval = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2.0, yval + 0.02, f'{yval:.1%}', ha='center', va='bottom')
+        ax.text(bar.get_x() + bar.get_width()/2.0, yval + 0.01, f'{yval:.1%}', ha='center', va='bottom')
 
-    # Save and close the plot
     plt.savefig(save_path)
     plt.close()
     
